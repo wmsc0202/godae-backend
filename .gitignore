@@ -8,7 +8,7 @@ package-lock.json
 
 # 환경 변수 파일
 .env
-.env.*     # 예: .env.production, .env.local 등
+.env.*
 
 # 빌드 출력물
 dist/
