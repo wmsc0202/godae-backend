@@ -6,6 +6,9 @@ yarn-error.log*
 package-lock.json
 .pnpm-debug.log*
 
+# 파일 저장소
+uploads/
+
 # 환경 변수 파일
 .env
 .env.*
