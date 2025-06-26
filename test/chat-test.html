@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>채팅 테스트</title>
+  <style>
+    body { font-family: sans-serif; }
+    #chat { list-style: none; padding: 0; max-height: 300px; overflow-y: auto; border: 1px solid #ccc; margin-bottom: 10px; }
+    #chat li { padding: 5px; border-bottom: 1px solid #eee; }
+  </style>
+</head>
+<body>
+  <h2>채팅 테스트</h2>
+  <input id="nickname" placeholder="닉네임 입력" />
+  <button onclick="connect()">연결</button>
+  <button onclick="disconnect()">종료</button>
+  <br><br>
+  <input id="message" placeholder="메시지 입력" />
+  <button onclick="send()">보내기</button>
+
+  <ul id="chat"></ul>
+
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script>
+    let socket = null;
+
+    function connect() {
+      if (socket && socket.connected) {
+        alert("이미 연결되어 있습니다.");
+        return;
+      }
+
+      const nickname = document.getElementById("nickname").value.trim();
+      if (!nickname) return alert("닉네임을 입력하세요");
+
+      socket = io("http://localhost:3000"); // 서버 주소에 맞게 수정
+
+      socket.on("connect", () => {
+        console.log("✅ 연결됨");
+        socket.emit("joinRoom", { roomId: "room1", nickname });
+      });
+
+      socket.on("chatMessage", (data) => {
+        const li = document.createElement("li");
+        li.textContent = `${data.nickname}: ${data.message}`;
+        document.getElementById("chat").appendChild(li);
+      });
+
+      socket.on("chatHistory", (history) => {
+        document.getElementById("chat").innerHTML = '';
+        history.forEach(msg => {
+          const li = document.createElement("li");
+          li.textContent = `${msg.nickname}: ${msg.message}`;
+          document.getElementById("chat").appendChild(li);
+        });
+      });
+
+      socket.on("disconnect", () => {
+        console.log("❌ 연결 종료됨");
+      });
+    }
+
+    function send() {
+      const msg = document.getElementById("message").value;
+      if (socket && socket.connected && msg.trim()) {
+        socket.emit("chatMessage", msg);
+        document.getElementById("message").value = '';
+      }
+    }
+
+    function disconnect() {
+      if (socket && socket.connected) {
+        socket.disconnect();
+        alert("연결이 종료되었습니다.");
+      } else {
+        alert("연결되어 있지 않습니다.");
+      }
+    }
+  </script>
+</body>
+</html>

@@ -59,11 +59,6 @@ router.post('/', verifyToken, upload.single('image'), async (req, res) => {
         console.error(err);
         return res.status(500).json({ message: '서버 오류' });
     }
-
-    res.status(200).json({
-        message: '이미지 업로드 성공',
-        path: relativePath
-    });
 });
 
 export default router;

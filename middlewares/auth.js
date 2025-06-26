@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 
+// 토큰 검증 미들웨어
 export function verifyToken(req, res, next) {
     const authHeader = req.headers['authorization'];
 

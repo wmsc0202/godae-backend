@@ -1,10 +1,10 @@
-import 'dotenv/config';
 import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
 import authRoutes from './routes/auth.js';
 import myInfoRoutes from './routes/my-info.js';
 import uploadImageRoutes from './routes/upload-image.js';
-import path from 'path';
-import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -20,7 +20,5 @@ app.use('/auth', authRoutes);
 app.use('/my-info', myInfoRoutes);
 app.use('/upload-image', uploadImageRoutes);
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-    console.log(`서버 실행 중: http://localhost:${port}`);
-});
+export default app;
+
