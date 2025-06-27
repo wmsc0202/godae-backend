@@ -10,3 +10,9 @@ REFRESH_EXPIRES_IN = [토큰 만료 시간 설정]
 
 SMTP_EMAIL = [네이버 메일 주소]
 SMTP_PASSWORD = [비밀번호]
+
+DB_HOST = [데이터베이스 호스트 주소]
+DB_PORT = [데이터베이스 포트]
+DB_USER = [데이터베이스 유저 이름]
+DB_PASS = [데이터베이스 유저 패스워드]
+DB_NAME = [데이터베이스 이름]

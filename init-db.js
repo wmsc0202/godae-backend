@@ -1,12 +1,5 @@
-import mysql from 'mysql2/promise';
+import pool from './db.js';
 
-const pool = mysql.createPool({
-  host     : 'localhost',
-  port     : '3365',
-  user     : 'root',
-  password : '123456',
-  database : 'godae'
-});
 
 async function createTables() {
   const conn = await pool.getConnection();
@@ -27,6 +20,7 @@ async function createTables() {
       created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
   `);
+  console.log("✅ users 테이블 생성 완료");
   
   // 액자 테이블 (이미지 업로드)
   await conn.execute(`
@@ -37,11 +31,33 @@ async function createTables() {
       uploaded_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )
   `);
-
-  conn.release();
-  console.log("✅ users 테이블 생성 완료");
   console.log("✅ frames 테이블 생성 완료");
 
+  // 친구 요청 테이블
+  await conn.execute(`
+    CREATE TABLE IF NOT EXISTS friend_requests (
+      id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+      sender_id INT UNSIGNED NOT NULL,
+      receiver_id INT UNSIGNED NOT NULL,
+      status ENUM('pending', 'accepted', 'rejected') DEFAULT 'pending',
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+  console.log("✅ friend_requests 테이블 생성 완료");
+
+  // 친구 목록 테이블
+  await conn.execute(`
+    CREATE TABLE IF NOT EXISTS friends (
+      id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+      user_id INT NOT NULL,
+      friend_id INT NOT NULL,
+      friend_nickname VARCHAR(10) NOT NULL UNIQUE,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+  console.log("✅ friends 테이블 생성 완료");
+
+  conn.release();
   return;
 }
 

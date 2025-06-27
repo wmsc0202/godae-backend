@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url';
 import authRoutes from './routes/auth.js';
 import myInfoRoutes from './routes/my-info.js';
 import uploadImageRoutes from './routes/upload-image.js';
+import playerRoutes from './routes/player.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -19,6 +20,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/auth', authRoutes);
 app.use('/my-info', myInfoRoutes);
 app.use('/upload-image', uploadImageRoutes);
+app.use('/player', playerRoutes);
 
 export default app;
 

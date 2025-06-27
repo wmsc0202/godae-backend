@@ -4,6 +4,7 @@ import { body, validationResult } from 'express-validator';
 import pool from '../db.js';
 import { verifyToken } from '../middlewares/auth.js';
 import { calcPregnancyDate } from '../utils/calcPregnancyDate.js';
+import { snakeToCamelAll } from '../utils/snakeToCamel.js';
 
 const router = express.Router();
 
@@ -33,7 +34,9 @@ router.get('/', verifyToken, async (req, res) => {
             return res.status(400).json({ message: '사용자 정보를 찾을 수 없습니다.' });
         }
 
-        return res.json(rows[0]);
+        const camelRows = snakeToCamelAll(rows);
+
+        return res.json(camelRows[0]);
     } catch(err) {
         console.error(err);
         res.status(500).json({ message: '서버 오류' });
